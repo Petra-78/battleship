@@ -1,4 +1,4 @@
-import { Ship } from './ship';
+import { Ship } from './ship.js';
 
 class Gameboard {
   constructor() {
@@ -16,7 +16,7 @@ class Gameboard {
 
   placeShip(length, coordinates, direction) {
     const ship = new Ship(length);
-    this.ships.push(ship);
+
     let x = coordinates[0];
     let y = coordinates[1];
     if (direction === 'vertical' && x + length <= 10 && x >= 0) {
@@ -27,6 +27,7 @@ class Gameboard {
           this.board[x + i][y] = ship;
         }
       }
+      this.ships.push(ship);
       return ship;
     } else if (direction === 'horizontal' && y + length <= 10 && y >= 0) {
       for (let i = 0; i < length; i++) {
@@ -36,35 +37,54 @@ class Gameboard {
           this.board[x][y + i] = ship;
         }
       }
+      this.ships.push(ship);
       return ship;
     } else return false;
   }
 
   receiveAttack(x, y) {
-    if (x < 0 || x > 10 || y < 0 || y > 10) {
+    if (x < 0 || x >= 10 || y < 0 || y >= 10) {
       throw new Error('invalid coordinates');
     }
     if (this.board[x][y] !== 0) {
       const ship = this.board[x][y];
       ship.hit();
-      const result = this.isALlSunk();
-      return result || ship;
+      if (this.isAllSunk() === true) return 'all ships have sunk';
+      else if (ship.isSunk() === true) return 'ship has sunk';
+      else return 'hit';
     } else {
       this.missedAttacks.push([x, y]);
-      return [x, y];
+      return 'miss';
     }
   }
 
-  isALlSunk() {
+  isAllSunk() {
     let sunkCount = 0;
     for (const ship of this.ships) {
-      if (ship.length === ship.hits) {
-        ship.sunk = true;
-        sunkCount++;
-      }
+      if (ship.sunk === true) sunkCount++;
     }
-    if (sunkCount === this.ships.length) {
-      return true;
+    if (sunkCount === this.ships.length) return true;
+    else return false;
+  }
+
+  generateRandomShips(ships) {
+    for (const ship of ships) {
+      let placed = false;
+      while (placed !== true) {
+        try {
+          const generateX = Math.floor(Math.random() * (10 - ship));
+          const generateY = Math.floor(Math.random() * (10 - ship));
+          const direction = Math.random();
+          if (direction > 0.5) {
+            this.placeShip(ship, [generateX, generateY], 'horizontal');
+          } else {
+            this.placeShip(ship, [generateX, generateY], 'vertical');
+          }
+          placed = true;
+        } catch (Error) {
+          //do nothing
+        }
+      }
     }
   }
 }

@@ -68,21 +68,28 @@ test('sends hit to a ship', () => {
   const board = new Gameboard();
   const ship = board.placeShip(3, [0, 0], 'horizontal');
   const attack = board.receiveAttack(0, 0);
-  expect(attack).toBe(ship);
+  expect(attack).toBe('hit');
 });
 
 test('returns the coordinates if the hit missed', () => {
   const board = new Gameboard();
   const ship = board.placeShip(3, [0, 0], 'vertical');
   const attack = board.receiveAttack(0, 1);
-  expect(attack).toEqual([0, 1]);
+  expect(attack).toEqual('miss');
 });
 
-test('notify if all ships have been sunk', () => {
+test('notifies if all ships have been sunk', () => {
   const board = new Gameboard();
   const ship = board.placeShip(3, [0, 0], 'horizontal');
   board.receiveAttack(0, 0);
   board.receiveAttack(0, 1);
   const attack3 = board.receiveAttack(0, 2);
-  expect(attack3).toBe(true);
+  expect(attack3).toBe('all ships have sunk');
+});
+
+test('generates random ship placement', () => {
+  const board = new Gameboard();
+  const randomShips = board.generateRandomShips([5, 4, 3, 3, 2]);
+
+  expect(board.ships.length).toBe(5);
 });
