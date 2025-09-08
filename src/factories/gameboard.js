@@ -19,7 +19,7 @@ class Gameboard {
 
     let x = coordinates[0];
     let y = coordinates[1];
-    if (direction === 'vertical' && x + length <= 10 && x >= 0) {
+    if (direction === 'horizontal' && x + length <= 10 && x >= 0) {
       for (let i = 0; i < length; i++) {
         if (this.board[x + i][y] !== 0) {
           throw new Error('that spot is already taken');
@@ -29,7 +29,7 @@ class Gameboard {
       }
       this.ships.push(ship);
       return ship;
-    } else if (direction === 'horizontal' && y + length <= 10 && y >= 0) {
+    } else if (direction === 'vertical' && y + length <= 10 && y >= 0) {
       for (let i = 0; i < length; i++) {
         if (this.board[x][y + i] !== 0) {
           throw new Error('this spot is already taken');
