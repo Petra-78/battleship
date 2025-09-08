@@ -19,22 +19,22 @@ class Gameboard {
 
     let x = coordinates[0];
     let y = coordinates[1];
-    if (direction === 'horizontal' && x + length <= 10 && x >= 0) {
+    if (direction === 'vertical' && y + length <= 10 && y >= 0) {
       for (let i = 0; i < length; i++) {
-        if (this.board[x + i][y] !== 0) {
+        if (this.board[y + i][x] !== 0) {
           throw new Error('that spot is already taken');
         } else {
-          this.board[x + i][y] = ship;
+          this.board[y + i][x] = ship;
         }
       }
       this.ships.push(ship);
       return ship;
-    } else if (direction === 'vertical' && y + length <= 10 && y >= 0) {
+    } else if (direction === 'horizontal' && x + length <= 10 && x >= 0) {
       for (let i = 0; i < length; i++) {
-        if (this.board[x][y + i] !== 0) {
+        if (this.board[y][x + i] !== 0) {
           throw new Error('this spot is already taken');
         } else {
-          this.board[x][y + i] = ship;
+          this.board[y][x + i] = ship;
         }
       }
       this.ships.push(ship);
@@ -46,9 +46,10 @@ class Gameboard {
     if (x < 0 || x >= 10 || y < 0 || y >= 10) {
       throw new Error('invalid coordinates');
     }
-    if (this.board[x][y] !== 0) {
-      const ship = this.board[x][y];
+    if (this.board[y][x] !== 0) {
+      const ship = this.board[y][x];
       ship.hit();
+      this.board[y][x] = { ship: ship, hit: true };
       if (this.isAllSunk() === true) return 'all ships have sunk';
       else if (ship.isSunk() === true) return 'ship has sunk';
       else return 'hit';

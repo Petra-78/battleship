@@ -18,10 +18,10 @@ test('make a 10x10 grid', () => {
 
 test('places a ship on the board vertically', () => {
   const board = new Gameboard();
-  const ship = board.placeShip(3, [0, 1], 'vertical');
+  const ship = board.placeShip(3, [1, 0], 'vertical');
   expect(board.board[0][1]).toBe(ship);
-  expect(board.board[0][2]).toBe(ship);
-  expect(board.board[0][3]).toBe(ship);
+  expect(board.board[1][1]).toBe(ship);
+  expect(board.board[2][1]).toBe(ship);
 
   expect(ship.length).toBe(3);
   expect(ship.hits).toBe(0);
@@ -30,10 +30,10 @@ test('places a ship on the board vertically', () => {
 
 test('places a ship on the board horizontally', () => {
   const board = new Gameboard();
-  const ship = board.placeShip(3, [0, 0], 'horizontal');
-  expect(board.board[0][0]).toBe(ship);
+  const ship = board.placeShip(3, [0, 1], 'horizontal');
   expect(board.board[1][0]).toBe(ship);
-  expect(board.board[2][0]).toBe(ship);
+  expect(board.board[1][1]).toBe(ship);
+  expect(board.board[1][2]).toBe(ship);
 
   expect(ship.length).toBe(3);
   expect(ship.hits).toBe(0);
@@ -45,7 +45,7 @@ test('throws an error when overlapped', () => {
   board.placeShip(3, [0, 1], 'horizontal');
   expect(() => {
     board.placeShip(3, [0, 1], 'vertical');
-  }).toThrow('this spot is already taken');
+  }).toThrow('that spot is already taken');
 });
 
 test('returns false when ship placed out of board', () => {
@@ -75,7 +75,7 @@ test('returns the coordinates if the hit missed', () => {
   const board = new Gameboard();
   const ship = board.placeShip(3, [0, 0], 'vertical');
   const attack = board.receiveAttack(0, 1);
-  expect(attack).toEqual('hit');
+  expect(attack).toEqual('miss');
 });
 
 test('notifies if all ships have been sunk', () => {

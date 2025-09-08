@@ -22,9 +22,4 @@ class Player {
   }
 }
 
-const player1 = new Player('human');
-const computer = new Player('computer');
-const attack = player1.attack(computer, [0, 0]);
-console.log(attack);
-
 export { Player };
