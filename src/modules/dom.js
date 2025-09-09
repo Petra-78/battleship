@@ -1,3 +1,7 @@
+import { Player } from '../factories/players';
+import { player, initGame } from './game';
+import { Ship } from '../factories/ship';
+
 function renderBoards(player, grid) {
   const gameboard = player.board.board;
   const container = document.querySelector(`.${grid}`);
@@ -22,7 +26,7 @@ function renderBoards(player, grid) {
 
       if (cell !== 0) {
         if (player.type === 'computer') {
-          div.style.backgroundColor = 'var(--green)';
+          div.style.backgroundColor = 'var(--purple)';
         } else div.style.backgroundColor = 'var(--green)';
         if (cell.hit === true) {
           div.style.backgroundColor = 'var(--red)';
@@ -39,10 +43,15 @@ function renderBoards(player, grid) {
 const shipsPopup = document.getElementById('placementPopup');
 const shipsGrid = document.getElementById('placementGrid');
 
-document.getElementById('nextBtn').addEventListener('click', (e) => {
+const startGame = document.getElementById('startGame');
+const nextBtn = document.getElementById('nextBtn');
+const inputName = document.getElementById('playerName');
+
+nextBtn.addEventListener('click', (e) => {
   e.preventDefault();
   const name = document.querySelector('.player-name');
-  const input = document.getElementById('playerName').value.trim();
+  const input = inputName.value.trim();
+  if (input === '') name.textContent = 'Player1';
   name.textContent = input;
   document.getElementById('namePopup').style.display = 'none';
   shipsPopup.style.display = 'flex';
@@ -61,5 +70,91 @@ function renderPlacementGrid() {
     }
   }
 }
+
+let shipsToPlace = [5, 4, 3, 3, 2];
+let currentShipIndex = 0;
+let horizontal = true;
+
+function showHover(x, y) {
+  clearHover();
+
+  const shipLength = shipsToPlace[currentShipIndex];
+  const cells = [];
+
+  for (let i = 0; i < shipLength; i++) {
+    const nx = horizontal ? x + i : x;
+    const ny = horizontal ? y : y + i;
+    const cell = placementGrid.querySelector(
+      `[data-x="${nx}"][data-y="${ny}"]`
+    );
+    if (!cell) return false;
+    cells.push(cell);
+  }
+
+  cells.forEach((c) => c.classList.add('hover'));
+  return true;
+}
+
+function clearHover() {
+  placementGrid
+    .querySelectorAll('.hover')
+    .forEach((c) => c.classList.remove('hover'));
+}
+
+placementGrid.addEventListener('mousemove', (e) => {
+  clearHover();
+  if (!e.target.classList.contains('cell')) return;
+
+  const x = parseInt(e.target.dataset.x, 10);
+  const y = parseInt(e.target.dataset.y, 10);
+
+  showHover(x, y);
+});
+
+placementGrid.addEventListener('mouseleave', clearHover);
+
+placementGrid.addEventListener('click', (e) => {
+  if (!e.target.classList.contains('cell')) return;
+
+  const x = parseInt(e.target.dataset.x, 10);
+  const y = parseInt(e.target.dataset.y, 10);
+
+  const shipLength = shipsToPlace[currentShipIndex];
+
+  const placed = player.board.placeShip(
+    new Ship(shipLength),
+    [x, y],
+    horizontal ? 'horizontal' : 'vertical'
+  );
+
+  if (!placed) {
+    alert('❌ Cannot place ship here');
+    return;
+  }
+
+  placementGrid.querySelectorAll('.hover').forEach((c) => {
+    c.classList.remove('hover');
+    c.classList.add('placed');
+  });
+
+  currentShipIndex++;
+
+  if (currentShipIndex >= shipsToPlace.length) {
+    startGame.disabled = false;
+  }
+});
+
+startGame.addEventListener('click', (e) => {
+  e.preventDefault();
+  console.log(player.board);
+  shipsPopup.style.display = 'none';
+  initGame();
+});
+
+const newGame = document.getElementById('newGame');
+newGame.addEventListener('click', () => {
+  document.getElementById('winnerPopup').style.display = 'none';
+  nextBtn.style.display = 'flex';
+});
 
 export { renderBoards };
