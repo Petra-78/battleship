@@ -2,8 +2,10 @@ import { Player } from '../factories/players';
 import { renderBoards } from './dom';
 import { Ship } from '../factories/ship';
 
+let player = new Player('human');
+
 const initGame = function () {
-  const p1 = new Player('human');
+  const p1 = player;
   const p2 = new Player('computer');
 
   renderBoards(p1, 'grid1');
@@ -28,7 +30,6 @@ const initGame = function () {
 
     let winner = checkWinner(p1, p2);
     if (winner) {
-      alert(winner);
       return;
     }
 
@@ -37,22 +38,23 @@ const initGame = function () {
 
     winner = checkWinner(p1, p2);
     if (winner) {
-      alert(winner);
       return;
     }
   });
 };
 
 function checkWinner(player1, player2) {
+  const winnerName = document.getElementById('winner-text');
   if (player1.board.isAllSunk()) {
-    return `${player2.type} wins!`;
+    winnerName.textContent = 'Computer won!';
+    return (document.getElementById('winnerPopup').style.display = 'flex');
   } else if (player2.board.isAllSunk()) {
-    return `${player1.type} wins!`;
+    const inputName = document.getElementById('playerName').value.trim();
+    winnerName.textContent = `${inputName} won!`;
+    return (document.getElementById('winnerPopup').style.display = 'flex');
   } else {
     return null;
   }
 }
 
-const placementGrid = document.getElementById('placementGrid');
-const toggleButton = document.getElementById('toggleOrientation');
-const startButton = document.getElementById('startGame');
+export { player, initGame };
