@@ -19,7 +19,7 @@ class Gameboard {
     let y = coordinates[1];
     if (direction === 'vertical' && y + ship.length <= 10 && y >= 0) {
       for (let i = 0; i < ship.length; i++) {
-        if (this.board[y + i][x] !== 0) {
+        if (!this.isAreaFree(x, y, ship.length, 'vertical')) {
           throw new Error('that spot is already taken');
         }
       }
@@ -28,7 +28,7 @@ class Gameboard {
       }
     } else if (direction === 'horizontal' && x + ship.length <= 10 && x >= 0) {
       for (let i = 0; i < ship.length; i++) {
-        if (this.board[y][x + i] !== 0) {
+        if (!this.isAreaFree(x, y, ship.length, 'vertical')) {
           throw new Error('that spot is already taken');
         }
       }
@@ -44,6 +44,7 @@ class Gameboard {
   }
 
   receiveAttack(x, y) {
+    debugger;
     if (x < 0 || x >= 10 || y < 0 || y >= 10) {
       throw new Error('invalid coordinates');
     }
@@ -52,7 +53,7 @@ class Gameboard {
       ship.hit();
       this.board[y][x] = { ship: ship, hit: true };
       if (this.isAllSunk() === true) return 'all ships have sunk';
-      else if (ship.isSunk() === true) return 'ship has sunk';
+      else if (ship.isSunk() === true) return 'sunk';
       else return 'hit';
     } else {
       this.missedAttacks.push([x, y]);
@@ -92,6 +93,26 @@ class Gameboard {
         }
       }
     }
+  }
+
+  isAreaFree(x, y, length, direction) {
+    for (let i = 0; i < length; i++) {
+      let cx = direction === 'horizontal' ? x + i : x;
+      let cy = direction === 'vertical' ? y + i : y;
+
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          const nx = cx + dx;
+          const ny = cy + dy;
+          if (nx >= 0 && nx < 10 && ny >= 0 && ny < 10) {
+            if (this.board[ny][nx] !== 0) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+    return true;
   }
 }
 
