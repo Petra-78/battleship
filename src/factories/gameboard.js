@@ -14,32 +14,33 @@ class Gameboard {
     }
   }
 
-  placeShip(length, coordinates, direction) {
-    const ship = new Ship(length);
-
+  placeShip(ship, coordinates, direction) {
     let x = coordinates[0];
     let y = coordinates[1];
-    if (direction === 'vertical' && y + length <= 10 && y >= 0) {
-      for (let i = 0; i < length; i++) {
+    if (direction === 'vertical' && y + ship.length <= 10 && y >= 0) {
+      for (let i = 0; i < ship.length; i++) {
         if (this.board[y + i][x] !== 0) {
           throw new Error('that spot is already taken');
-        } else {
-          this.board[y + i][x] = ship;
         }
       }
-      this.ships.push(ship);
-      return ship;
-    } else if (direction === 'horizontal' && x + length <= 10 && x >= 0) {
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < ship.length; i++) {
+        this.board[y + i][x] = ship;
+      }
+    } else if (direction === 'horizontal' && x + ship.length <= 10 && x >= 0) {
+      for (let i = 0; i < ship.length; i++) {
         if (this.board[y][x + i] !== 0) {
-          throw new Error('this spot is already taken');
-        } else {
-          this.board[y][x + i] = ship;
+          throw new Error('that spot is already taken');
         }
       }
-      this.ships.push(ship);
-      return ship;
-    } else return false;
+      for (let i = 0; i < ship.length; i++) {
+        this.board[y][x + i] = ship;
+      }
+    } else {
+      throw new Error('invalid placement');
+    }
+
+    this.ships.push(ship);
+    return ship;
   }
 
   receiveAttack(x, y) {
@@ -77,9 +78,13 @@ class Gameboard {
           const generateY = Math.floor(Math.random() * (10 - ship));
           const direction = Math.random();
           if (direction > 0.5) {
-            this.placeShip(ship, [generateX, generateY], 'horizontal');
+            this.placeShip(
+              new Ship(ship),
+              [generateX, generateY],
+              'horizontal'
+            );
           } else {
-            this.placeShip(ship, [generateX, generateY], 'vertical');
+            this.placeShip(new Ship(ship), [generateX, generateY], 'vertical');
           }
           placed = true;
         } catch (Error) {
