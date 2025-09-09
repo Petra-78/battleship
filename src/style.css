@@ -58,3 +58,96 @@ h1 {
 .grid2 > div {
   border: 1px solid var(--light-purple);
 }
+
+.grid2 > div:hover {
+  cursor: pointer;
+  box-shadow: inset black 5px;
+}
+
+.namePopup {
+  display: flex;
+  position: absolute;
+  z-index: 9999;
+  height: 100vh;
+  width: 100vw;
+  background-color: #0000007c;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.shipsPopup {
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  height: 100vh;
+  width: 100vw;
+  gap: 20px;
+  background-color: #0000007c;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.shipsPopup > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  border-radius: 20px;
+  gap: 20px;
+  background-color: var(--purple);
+}
+
+.shipsPopup > div > button {
+  width: 50%;
+}
+
+p {
+  font-size: 25px;
+  color: var(--beige);
+  font-weight: 700;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  width: 40%;
+  height: 40%;
+  gap: 20px;
+  padding: 50px;
+  background-color: var(--purple);
+  border-radius: 20px;
+}
+
+label {
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--beige);
+}
+
+input {
+  border-radius: 10px;
+  border: 2px solid var(--light-purple);
+  padding: 10px;
+}
+
+form > button,
+button {
+  width: 20%;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  background-color: var(--light-purple);
+  color: var(--beige);
+  border: none;
+  border-radius: 10px;
+}
+
+button:hover {
+  background-color: var(--green-sunk);
+  cursor: pointer;
+}
