@@ -9,6 +9,10 @@
     <div class="header">
       <h1>Battleship</h1>
     </div>
+    <div class="names">
+      <p class="player-name">Player1</p>
+      <p class="computer-name">Computer</p>
+    </div>
     <div class="boards">
       <div class="grid1"></div>
       <div class="grid2"></div>
@@ -26,7 +30,10 @@
       <div>
         <p>Place your ships (5 total)</p>
         <div id="placementGrid" class="grid1"></div>
-        <button id="startGame" disabled>Start Game</button>
+        <div>
+          <button id="startGame" disabled>Start Game</button>
+          <button id="toggleOrientation">Rotate</button>
+        </div>
       </div>
     </div>
   </body>

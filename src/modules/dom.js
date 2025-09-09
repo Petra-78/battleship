@@ -13,6 +13,13 @@ function renderBoards(player, grid) {
 
       div.style.backgroundColor = 'var(--purple)';
 
+      const isMissed = player.board.missedAttacks.some(
+        ([mx, my]) => mx === x && my === y
+      );
+      if (isMissed) {
+        div.style.backgroundColor = 'var(--light-purple)';
+      }
+
       if (cell !== 0) {
         if (player.type === 'computer') {
           div.style.backgroundColor = 'var(--green)';
@@ -27,6 +34,32 @@ function renderBoards(player, grid) {
       container.appendChild(div);
     });
   });
+}
+
+const shipsPopup = document.getElementById('placementPopup');
+const shipsGrid = document.getElementById('placementGrid');
+
+document.getElementById('nextBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  const name = document.querySelector('.player-name');
+  const input = document.getElementById('playerName').value.trim();
+  name.textContent = input;
+  document.getElementById('namePopup').style.display = 'none';
+  shipsPopup.style.display = 'flex';
+  renderPlacementGrid();
+});
+
+function renderPlacementGrid() {
+  shipsGrid.innerHTML = '';
+  for (let y = 0; y < 10; y++) {
+    for (let x = 0; x < 10; x++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.dataset.x = x;
+      cell.dataset.y = y;
+      shipsGrid.appendChild(cell);
+    }
+  }
 }
 
 export { renderBoards };
