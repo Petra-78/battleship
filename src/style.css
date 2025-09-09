@@ -51,6 +51,7 @@ h1 {
   grid-template-rows: repeat(10, 1fr);
   height: 400px;
   width: 400px;
+  gap: 2px;
   border: 3px solid var(--light-purple);
 }
 
@@ -178,9 +179,43 @@ button:hover {
 }
 
 #placementGrid .cell.hover {
-  background-color: var(--light-purple);
+  background-color: var(--green);
 }
 
 #placementGrid .cell.placed {
   background-color: var(--green);
+}
+
+#winnerPopup {
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  height: 100vh;
+  width: 100vw;
+  background-color: #0000007c;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#winnerPopup > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10%;
+  background-color: var(--purple);
+  height: 40%;
+  width: 40%;
+  border-radius: 20px;
+}
+
+#winnerPopup > div > button {
+  width: 50%;
+}
+
+h2 {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--beige);
 }
