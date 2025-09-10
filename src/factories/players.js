@@ -18,31 +18,43 @@ class Player {
         (coord) => coord[0] === x && coord[1] === y
       );
 
-      if (alreadyMissed === true || cell.hit === true) {
-        alert('you already attacked there!');
-        return 'invalid';
+      if (alreadyMissed || (cell && cell.hit === true)) {
+        return { result: 'invalid', again: true };
       }
 
-      return player.board.receiveAttack(x, y);
-    } else if (this.type === 'computer') {
-      let valid = false;
-      let x, y;
+      const result = player.board.receiveAttack(x, y);
 
-      while (valid !== true) {
-        x = Math.floor(Math.random() * 10);
-        y = Math.floor(Math.random() * 10);
+      if (result === 'hit' || result === 'sunk') {
+        return { result, again: true };
+      }
+
+      if (result === 'miss' || result === 'all ships have sunk') {
+        return { result, again: false };
+      }
+    } else if (this.type === 'computer') {
+      while (true) {
+        const x = Math.floor(Math.random() * 10);
+        const y = Math.floor(Math.random() * 10);
         const cell = player.board.board[y][x];
 
         const alreadyMissed = player.board.missedAttacks.some(
           (coord) => coord[0] === x && coord[1] === y
         );
 
-        if (alreadyMissed === false || cell === 0) {
-          valid = true;
+        if (alreadyMissed || (cell && cell.hit === true)) {
+          continue;
+        }
+
+        const result = player.board.receiveAttack(x, y);
+
+        if (result === 'hit' || result === 'sunk') {
+          return { result, again: true };
+        }
+
+        if (result === 'miss' || result === 'all ships have sunk') {
+          return { result, again: false };
         }
       }
-
-      return player.board.receiveAttack(x, y);
     }
   }
 }
