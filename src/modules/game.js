@@ -13,33 +13,47 @@ const initGame = function () {
 
   const computerContainer = document.querySelector('.grid2');
 
-  computerContainer.addEventListener('click', (e) => {
+  let playerCanClick = true;
+
+  computerContainer.addEventListener('click', function handlePlayerAttack(e) {
+    if (!playerCanClick) return;
+
     const cell = e.target;
     if (!cell.classList.contains('cell')) return;
 
     const x = parseInt(cell.dataset.x, 10);
     const y = parseInt(cell.dataset.y, 10);
 
-    const alreadyAttacked = p2.board.missedAttacks;
-    for (const coor of alreadyAttacked) {
-      if (x === coor[0] && y === coor[1]) return null;
-    }
+    const { result, again } = p1.attack(p2, [x, y]);
 
-    p1.attack(p2, [x, y]);
+    if (result === 'invalid') return;
+
     renderBoards(p2, 'grid2');
 
     let winner = checkWinner(p1, p2);
-    if (winner) {
+    if (winner) return;
+
+    if (again) {
       return;
     }
 
-    p2.attack(p1);
-    renderBoards(p1, 'grid1');
+    playerCanClick = false;
 
-    winner = checkWinner(p1, p2);
-    if (winner) {
-      return;
+    function computerTurn() {
+      const { result: compResult, again: compAgain } = p2.attack(p1);
+      renderBoards(p1, 'grid1');
+
+      let winner = checkWinner(p1, p2);
+      if (winner) return;
+
+      if (compAgain) {
+        setTimeout(computerTurn, 800);
+      } else {
+        playerCanClick = true;
+      }
     }
+
+    setTimeout(computerTurn, 800);
   });
 };
 
