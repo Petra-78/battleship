@@ -17,9 +17,10 @@ class Gameboard {
   placeShip(ship, coordinates, direction) {
     let x = coordinates[0];
     let y = coordinates[1];
+
     if (direction === 'vertical' && y + ship.length <= 10 && y >= 0) {
       for (let i = 0; i < ship.length; i++) {
-        if (!this.isAreaFree(x, y, ship.length, 'vertical')) {
+        if (this.board[y + i][x] !== 0) {
           throw new Error('that spot is already taken');
         }
       }
@@ -28,7 +29,7 @@ class Gameboard {
       }
     } else if (direction === 'horizontal' && x + ship.length <= 10 && x >= 0) {
       for (let i = 0; i < ship.length; i++) {
-        if (!this.isAreaFree(x, y, ship.length, 'vertical')) {
+        if (this.board[y][x + i] !== 0) {
           throw new Error('that spot is already taken');
         }
       }
@@ -78,13 +79,18 @@ class Gameboard {
           const generateX = Math.floor(Math.random() * (10 - ship));
           const generateY = Math.floor(Math.random() * (10 - ship));
           const direction = Math.random();
-          if (direction > 0.5) {
+          if (
+            direction > 0.5 &&
+            this.isAreaFree(generateX, generateY, ship, 'horizontal') === true
+          ) {
             this.placeShip(
               new Ship(ship),
               [generateX, generateY],
               'horizontal'
             );
-          } else {
+          } else if (
+            this.isAreaFree(generateX, generateY, ship, 'vertical') === true
+          ) {
             this.placeShip(new Ship(ship), [generateX, generateY], 'vertical');
           }
           placed = true;
@@ -106,7 +112,7 @@ class Gameboard {
           const ny = cy + dy;
           if (nx >= 0 && nx < 10 && ny >= 0 && ny < 10) {
             if (this.board[ny][nx] !== 0) {
-              return false;
+              throw new Error('cant place here');
             }
           }
         }
