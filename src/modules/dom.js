@@ -51,8 +51,8 @@ nextBtn.addEventListener('click', (e) => {
   e.preventDefault();
   const name = document.querySelector('.player-name');
   const input = inputName.value.trim();
-  if (input === '') name.textContent = 'Player1';
-  name.textContent = input;
+  if (inputName.value === '') name.textContent = 'Player1';
+  else name.textContent = input;
   document.getElementById('namePopup').style.display = 'none';
   shipsPopup.style.display = 'flex';
   renderPlacementGrid();
@@ -153,8 +153,7 @@ startGame.addEventListener('click', (e) => {
 
 const newGame = document.getElementById('newGame');
 newGame.addEventListener('click', () => {
-  document.getElementById('winnerPopup').style.display = 'none';
-  nextBtn.style.display = 'flex';
+  location.reload();
 });
 
 const rotateBtn = document.getElementById('rotateBtn');

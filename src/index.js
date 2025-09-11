@@ -1,3 +1,3 @@
 import './style.css';
-import { renderBoards } from './modules/dom';
-import './modules/game';
+
+document.querySelector('.namePopup').style.display = 'flex';
