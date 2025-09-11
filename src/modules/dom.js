@@ -157,4 +157,10 @@ newGame.addEventListener('click', () => {
   nextBtn.style.display = 'flex';
 });
 
+const rotateBtn = document.getElementById('rotateBtn');
+rotateBtn.addEventListener('click', () => {
+  if (horizontal === true) horizontal = false;
+  else horizontal = true;
+});
+
 export { renderBoards };
