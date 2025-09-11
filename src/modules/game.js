@@ -1,6 +1,5 @@
 import { Player } from '../factories/players';
 import { renderBoards } from './dom';
-import { Ship } from '../factories/ship';
 
 let player = new Player('human');
 
@@ -12,12 +11,10 @@ const initGame = function () {
   renderBoards(p2, 'grid2');
 
   const computerContainer = document.querySelector('.grid2');
-
   let playerCanClick = true;
 
   computerContainer.addEventListener('click', function handlePlayerAttack(e) {
     if (!playerCanClick) return;
-
     const cell = e.target;
     if (!cell.classList.contains('cell')) return;
 
@@ -25,35 +22,27 @@ const initGame = function () {
     const y = parseInt(cell.dataset.y, 10);
 
     const { result, again } = p1.attack(p2, [x, y]);
-
     if (result === 'invalid') return;
 
     renderBoards(p2, 'grid2');
+    if (checkWinner(p1, p2)) return;
 
-    let winner = checkWinner(p1, p2);
-    if (winner) return;
-
-    if (again) {
-      return;
-    }
+    if (again) return;
 
     playerCanClick = false;
+    setTimeout(computerTurn, 700);
 
     function computerTurn() {
-      const { result: compResult, again: compAgain } = p2.attack(p1);
+      const { x, y, result, again } = p2.attack(p1);
       renderBoards(p1, 'grid1');
+      if (checkWinner(p1, p2)) return;
 
-      let winner = checkWinner(p1, p2);
-      if (winner) return;
-
-      if (compAgain) {
-        setTimeout(computerTurn, 800);
+      if (again) {
+        setTimeout(computerTurn, 700);
       } else {
         playerCanClick = true;
       }
     }
-
-    setTimeout(computerTurn, 800);
   });
 };
 
@@ -61,14 +50,15 @@ function checkWinner(player1, player2) {
   const winnerName = document.getElementById('winner-text');
   if (player1.board.isAllSunk()) {
     winnerName.textContent = 'Computer won!';
-    return (document.getElementById('winnerPopup').style.display = 'flex');
+    document.getElementById('winnerPopup').style.display = 'flex';
+    return true;
   } else if (player2.board.isAllSunk()) {
     const inputName = document.getElementById('playerName').value.trim();
-    winnerName.textContent = `${inputName} won!`;
-    return (document.getElementById('winnerPopup').style.display = 'flex');
-  } else {
-    return null;
+    winnerName.textContent = `${inputName || 'Player1'} won!`;
+    document.getElementById('winnerPopup').style.display = 'flex';
+    return true;
   }
+  return false;
 }
 
 export { player, initGame };
