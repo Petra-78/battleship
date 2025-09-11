@@ -45,7 +45,6 @@ class Gameboard {
   }
 
   receiveAttack(x, y) {
-    debugger;
     if (x < 0 || x >= 10 || y < 0 || y >= 10) {
       throw new Error('invalid coordinates');
     }
