@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Battleship</title>
+  <script defer src="main.js"></script></head>
+  <body>
+    <div class="header">
+      <h1>Battleship</h1>
+    </div>
+    <div class="names">
+      <p class="player-name">Player1</p>
+      <p class="computer-name">Computer</p>
+    </div>
+    <div class="boards">
+      <div class="grid1"></div>
+      <div class="grid2"></div>
+    </div>
+
+    <div id="namePopup" class="namePopup">
+      <form>
+        <label for="playerName">Enter your name:</label>
+        <input type="text" id="playerName" />
+        <button id="nextBtn">Next</button>
+      </form>
+    </div>
+
+    <div id="placementPopup" class="shipsPopup">
+      <div>
+        <p>Place your ships (5 total)</p>
+        <div id="placementGrid" class="grid1"></div>
+        <div>
+          <button id="startGame" disabled>Start Game</button>
+          <button id="rotateBtn">Rotate</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="winnerPopup">
+      <div>
+        <h2 id="winner-text">dddd</h2>
+        <button id="newGame">Start new game</button>
+      </div>
+    </div>
+  </body>
+</html>
