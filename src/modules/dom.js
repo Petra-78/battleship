@@ -1,4 +1,3 @@
-import { Player } from '../factories/players';
 import { player, initGame } from './game';
 import { Ship } from '../factories/ship';
 
@@ -84,9 +83,7 @@ function showHover(x, y) {
   for (let i = 0; i < shipLength; i++) {
     const nx = horizontal ? x + i : x;
     const ny = horizontal ? y : y + i;
-    const cell = placementGrid.querySelector(
-      `[data-x="${nx}"][data-y="${ny}"]`
-    );
+    const cell = shipsGrid.querySelector(`[data-x="${nx}"][data-y="${ny}"]`);
     if (!cell) return false;
     cells.push(cell);
   }
@@ -96,12 +93,12 @@ function showHover(x, y) {
 }
 
 function clearHover() {
-  placementGrid
+  shipsGrid
     .querySelectorAll('.hover')
     .forEach((c) => c.classList.remove('hover'));
 }
 
-placementGrid.addEventListener('mousemove', (e) => {
+shipsGrid.addEventListener('mousemove', (e) => {
   clearHover();
   if (!e.target.classList.contains('cell')) return;
 
@@ -111,9 +108,9 @@ placementGrid.addEventListener('mousemove', (e) => {
   showHover(x, y);
 });
 
-placementGrid.addEventListener('mouseleave', clearHover);
+shipsGrid.addEventListener('mouseleave', clearHover);
 
-placementGrid.addEventListener('click', (e) => {
+shipsGrid.addEventListener('click', (e) => {
   if (!e.target.classList.contains('cell')) return;
 
   const x = parseInt(e.target.dataset.x, 10);
@@ -132,7 +129,7 @@ placementGrid.addEventListener('click', (e) => {
     return;
   }
 
-  placementGrid.querySelectorAll('.hover').forEach((c) => {
+  shipsGrid.querySelectorAll('.hover').forEach((c) => {
     c.classList.remove('hover');
     c.classList.add('placed');
   });
